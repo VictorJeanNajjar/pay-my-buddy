@@ -1,4 +1,4 @@
-package pay.my.buddy.app.Configs;
+package pay.my.buddy.app.person;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

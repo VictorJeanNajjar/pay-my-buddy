@@ -1,8 +1,6 @@
 package pay.my.buddy.app.person;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,11 +8,12 @@ import java.time.LocalDate;
 @Entity
 public class Person {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_Id")
     public Long personId;
     public String firstName;
     public String lastName;
-    public String emailAdress;
+    public String emailAddress;
     public LocalDate dateOfBirth;
     public BigDecimal wallet;
     public String username;
@@ -26,7 +25,7 @@ public class Person {
                 "personId=" + personId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", emailAdress='" + emailAdress + '\'' +
+                ", emailAdress='" + emailAddress + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", wallet=" + wallet +
                 ", username='" + username + '\'' +
@@ -60,12 +59,12 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public String getEmailAdress() {
-        return emailAdress;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setEmailAdress(String emailAdress) {
-        this.emailAdress = emailAdress;
+    public void setEmailAddress(String emailAdress) {
+        this.emailAddress = emailAdress;
     }
 
     public LocalDate getDateOfBirth() {
