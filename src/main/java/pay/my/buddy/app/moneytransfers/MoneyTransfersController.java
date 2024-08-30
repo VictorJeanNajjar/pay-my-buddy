@@ -5,14 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pay.my.buddy.app.person.PersonService;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/moneyTransferController")
 public class MoneyTransfersController {
     @Autowired
-    private final MoneyTransfersService moneyTransfersService;
+    MoneyTransfersService moneyTransfersService;
     @Autowired
-    private final PersonService personService;
+    PersonService personService;
+    @Autowired
+    MoneyTransfersRepository moneyTransfersRepository;
 
     @Autowired
     public MoneyTransfersController(MoneyTransfersService moneyTransfersService, PersonService personService) {
@@ -21,9 +24,15 @@ public class MoneyTransfersController {
     }
 
     @PostMapping("/transfer")
-    public String transferMoneyController(@RequestParam Long receiverId, @RequestParam BigDecimal amount, @RequestParam String description) {
-        Long senderId = personService.getCurrentUserId();
-        return moneyTransfersService.transferMoney(senderId, receiverId, amount, description);
+    public String transferMoneyController(@RequestParam String receiverUsername, @RequestParam BigDecimal amount, @RequestParam String description, @RequestParam Long companyWalletId) {
+        return moneyTransfersService.transferMoney(receiverUsername, amount, description, companyWalletId);
+    }
+    @GetMapping("/viewAllTransfers")
+    public List<MoneyTransfers> viewAllTransfers(){return moneyTransfersRepository.findAll();}
+    @GetMapping("/userTransfers")
+    public List<String> userTransferscontroller(){
+        return moneyTransfersService.userTransfers();
     }
 }
+
 

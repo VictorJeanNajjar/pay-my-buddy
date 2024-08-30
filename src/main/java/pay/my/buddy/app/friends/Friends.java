@@ -11,23 +11,13 @@ public class Friends {
     public String senderFirstName;
     public String senderLastName;
     public Long senderId;
+    public String senderUsername;
     public String receiverFirstName;
     public String receiverLastName;
     public Long receiverId;
-
-    public Friends(long friendshipId, String senderFirstName, String senderLastName, Long senderId, String receiverFirstName, String receiverLastName, Long receiverId) {
-        this.friendshipId = friendshipId;
-        this.senderFirstName = senderFirstName;
-        this.senderLastName = senderLastName;
-        this.senderId = senderId;
-        this.receiverFirstName = receiverFirstName;
-        this.receiverLastName = receiverLastName;
-        this.receiverId = receiverId;
-    }
-
+    public String receiverUsername;
     public Friends() {
     }
-
     @Override
     public String toString() {
         return "Friends{" +
@@ -35,10 +25,20 @@ public class Friends {
                 ", senderFirstName='" + senderFirstName + '\'' +
                 ", senderLastName='" + senderLastName + '\'' +
                 ", senderId=" + senderId +
+                ", senderUsername='" + senderUsername + '\'' +
                 ", receiverFirstName='" + receiverFirstName + '\'' +
                 ", receiverLastName='" + receiverLastName + '\'' +
                 ", receiverId=" + receiverId +
+                ", receiverUsername='" + receiverUsername + '\'' +
                 '}';
+    }
+
+    public long getFriendshipId() {
+        return friendshipId;
+    }
+
+    public void setFriendshipId(long friendshipId) {
+        this.friendshipId = friendshipId;
     }
 
     public String getSenderFirstName() {
@@ -57,6 +57,22 @@ public class Friends {
         this.senderLastName = senderLastName;
     }
 
+    public Long getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(Long senderId) {
+        this.senderId = senderId;
+    }
+
+    public String getSenderUsername() {
+        return senderUsername;
+    }
+
+    public void setSenderUsername(String senderUsername) {
+        this.senderUsername = senderUsername;
+    }
+
     public String getReceiverFirstName() {
         return receiverFirstName;
     }
@@ -71,5 +87,21 @@ public class Friends {
 
     public void setReceiverLastName(String receiverLastName) {
         this.receiverLastName = receiverLastName;
+    }
+
+    public Long getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(Long receiverId) {
+        this.receiverId = receiverId;
+    }
+
+    public String getReceiverUsername() {
+        return receiverUsername;
+    }
+
+    public void setReceiverUsername(String receiverUsername) {
+        this.receiverUsername = receiverUsername;
     }
 }

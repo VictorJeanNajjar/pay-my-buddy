@@ -13,44 +13,44 @@ public class MoneyTransfers {
     public String senderFirstName;
     public String senderLastName;
     public Long senderId;
+    public String senderUsername;
     public String receiverFirstName;
     public String receiverLastName;
     public Long receiverId;
+    public String receiverUsername;
     public String description;
     public LocalDate transferDate;
     public BigDecimal transferAmount;
 
-    public MoneyTransfers(Long moneyTransfersId, String senderFirstName, String senderLastName, Long senderId, String receiverFirstName, String receiverLastName, Long receiverId, String description, LocalDate transferDate, BigDecimal transferAmount) {
-        this.transferId = moneyTransfersId;
-        this.senderFirstName = senderFirstName;
-        this.senderLastName = senderLastName;
-        this.senderId = senderId;
-        this.receiverFirstName = receiverFirstName;
-        this.receiverLastName = receiverLastName;
-        this.receiverId = receiverId;
-        this.description = description;
-        this.transferDate = transferDate;
-        this.transferAmount = transferAmount;
-    }
-
-    public MoneyTransfers() {
+    public MoneyTransfers(){
     }
 
     @Override
     public String toString() {
         return "MoneyTransfers{" +
-                "MoneyTransfersId=" + transferId +
+                "transferId=" + transferId +
                 ", senderFirstName='" + senderFirstName + '\'' +
                 ", senderLastName='" + senderLastName + '\'' +
                 ", senderId=" + senderId +
-                ", receiverFirst='" + receiverFirstName + '\'' +
+                ", senderUsername='" + senderUsername + '\'' +
+                ", receiverFirstName='" + receiverFirstName + '\'' +
                 ", receiverLastName='" + receiverLastName + '\'' +
                 ", receiverId=" + receiverId +
+                ", receiverUsername='" + receiverUsername + '\'' +
                 ", description='" + description + '\'' +
                 ", transferDate=" + transferDate +
                 ", transferAmount=" + transferAmount +
                 '}';
     }
+
+    public Long getTransferId() {
+        return transferId;
+    }
+
+    public void setTransferId(Long transferId) {
+        this.transferId = transferId;
+    }
+
     public String getSenderFirstName() {
         return senderFirstName;
     }
@@ -67,7 +67,23 @@ public class MoneyTransfers {
         this.senderLastName = senderLastName;
     }
 
-    public String getReceiverFirst() {
+    public Long getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(Long senderId) {
+        this.senderId = senderId;
+    }
+
+    public String getSenderUsername() {
+        return senderUsername;
+    }
+
+    public void setSenderUsername(String senderUsername) {
+        this.senderUsername = senderUsername;
+    }
+
+    public String getReceiverFirstName() {
         return receiverFirstName;
     }
 
@@ -81,6 +97,22 @@ public class MoneyTransfers {
 
     public void setReceiverLastName(String receiverLastName) {
         this.receiverLastName = receiverLastName;
+    }
+
+    public Long getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(Long receiverId) {
+        this.receiverId = receiverId;
+    }
+
+    public String getReceiverUsername() {
+        return receiverUsername;
+    }
+
+    public void setReceiverUsername(String receiverUsername) {
+        this.receiverUsername = receiverUsername;
     }
 
     public String getDescription() {
@@ -105,29 +137,5 @@ public class MoneyTransfers {
 
     public void setTransferAmount(BigDecimal transferAmount) {
         this.transferAmount = transferAmount;
-    }
-
-    public void setTransferId(Long moneyTransfersId) {
-        transferId = moneyTransfersId;
-    }
-
-    public Long getTransferId() {
-        return transferId;
-    }
-
-    public Long getSenderId() {
-        return senderId;
-    }
-
-    public Long getReceiverId() {
-        return receiverId;
-    }
-
-    public void setSenderId(Long senderId) {
-        this.senderId = senderId;
-    }
-
-    public void setReceiverId(Long receiverId) {
-        this.receiverId = receiverId;
     }
 }

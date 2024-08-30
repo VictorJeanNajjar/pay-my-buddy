@@ -30,14 +30,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/public/**", "/error").permitAll()
+                        .requestMatchers("/api/public/**", "/error", "/api/persons/newAccount", "/api/persons/AllClients").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable);
                 http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll
                 )
-                .logout(LogoutConfigurer::permitAll
+                .logout(logout -> logout
+                        .logoutUrl("/logout") // Define the logout URL
+                        .logoutSuccessUrl("/login") // Redirect URL after logout
+                        .invalidateHttpSession(true) // Invalidate the session
+                        .deleteCookies("JSESSIONID") // Delete cookies
+                        .permitAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable); // Disable CSRF for testing purposes
 

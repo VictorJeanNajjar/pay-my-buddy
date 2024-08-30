@@ -1,8 +1,6 @@
 package pay.my.buddy.app.companywallet;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
@@ -10,37 +8,40 @@ import java.math.BigDecimal;
 public class CompanyWallet {
     @Id
     @GeneratedValue
-    private Long companyWalletId;
-    public BigDecimal companyWallet;
-
-    public CompanyWallet(Long companyWalletId, BigDecimal companyWallet) {
-        this.companyWalletId = companyWalletId;
-        this.companyWallet = companyWallet;
-    }
+    private Long id;
+    private BigDecimal wallet;
 
     public CompanyWallet() {
+
+    }
+
+    public void addToWallet(BigDecimal amount) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Amount to add must be non-negative");
+        }
+        this.wallet = this.wallet.add(amount);
     }
 
     @Override
     public String toString() {
         return "CompanyWallet{" +
-                "companyWallet=" + companyWallet +
+                "Wallet=" + wallet +
                 '}';
     }
 
     public Long getCompanyWalletId() {
-        return companyWalletId;
+        return id;
     }
 
     public void setCompanyWalletId(Long companyWalletId) {
-        this.companyWalletId = companyWalletId;
+        this.id = id;
     }
 
     public BigDecimal getCompanyWallet() {
-        return companyWallet;
+        return wallet;
     }
 
     public void setCompanyWallet(BigDecimal companyWallet) {
-        this.companyWallet = companyWallet;
+        this.wallet = wallet;
     }
 }

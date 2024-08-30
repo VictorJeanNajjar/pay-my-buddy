@@ -1,9 +1,7 @@
 package pay.my.buddy.app.person;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,11 +11,17 @@ public class PersonsController {
 
     @Autowired
     private PersonRepository personRepository;
+    @Autowired
+    public PersonService personService;
 
-    @GetMapping
-    public List<Person> getAllPersons() {
-        List<Person> persons = personRepository.findAll();
-        System.out.println("Number of persons retrieved: " + persons.size());
-        return persons;
+    @GetMapping("/AllClients")
+    public List<Person> getAllPersons() {return personRepository.findAll();}
+    @PostMapping("/newAccount")
+    public String addNewPersonController(@RequestBody Person newClient){
+        return personService.addNewPerson(newClient);
+    }
+    @DeleteMapping("/deleteAccount")
+    public String accountDeletionController(){
+        return personService.accountDeletion();
     }
 }
