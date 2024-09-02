@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MoneyTransfers.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">alerts</a> &gt; <a href="index.source.html" class="el_package">pay.my.buddy.app.moneytransfers</a> &gt; <span class="el_source">MoneyTransfers.java</span></div><h1>MoneyTransfers.java</h1><pre class="source lang-java linenums">package pay.my.buddy.app.moneytransfers;
+
+import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
+public class MoneyTransfers {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;transfer_id&quot;)
+    public Long transferId;
+    public String senderFirstName;
+    public String senderLastName;
+    public Long senderId;
+    public String senderUsername;
+    public String receiverFirstName;
+    public String receiverLastName;
+    public Long receiverId;
+    public String receiverUsername;
+    public String description;
+    public LocalDate transferDate;
+    public BigDecimal transferAmount;
+
+<span class="fc" id="L30">    public MoneyTransfers(){</span>
+<span class="fc" id="L31">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L35">        return &quot;MoneyTransfers{&quot; +</span>
+                &quot;transferId=&quot; + transferId +
+                &quot;, senderFirstName='&quot; + senderFirstName + '\'' +
+                &quot;, senderLastName='&quot; + senderLastName + '\'' +
+                &quot;, senderId=&quot; + senderId +
+                &quot;, senderUsername='&quot; + senderUsername + '\'' +
+                &quot;, receiverFirstName='&quot; + receiverFirstName + '\'' +
+                &quot;, receiverLastName='&quot; + receiverLastName + '\'' +
+                &quot;, receiverId=&quot; + receiverId +
+                &quot;, receiverUsername='&quot; + receiverUsername + '\'' +
+                &quot;, description='&quot; + description + '\'' +
+                &quot;, transferDate=&quot; + transferDate +
+                &quot;, transferAmount=&quot; + transferAmount +
+                '}';
+    }
+
+    public Long getTransferId() {
+<span class="nc" id="L52">        return transferId;</span>
+    }
+
+    public void setTransferId(Long transferId) {
+<span class="nc" id="L56">        this.transferId = transferId;</span>
+<span class="nc" id="L57">    }</span>
+
+    public String getSenderFirstName() {
+<span class="fc" id="L60">        return senderFirstName;</span>
+    }
+
+    public void setSenderFirstName(String senderFirstName) {
+<span class="fc" id="L64">        this.senderFirstName = senderFirstName;</span>
+<span class="fc" id="L65">    }</span>
+
+    public String getSenderLastName() {
+<span class="fc" id="L68">        return senderLastName;</span>
+    }
+
+    public void setSenderLastName(String senderLastName) {
+<span class="fc" id="L72">        this.senderLastName = senderLastName;</span>
+<span class="fc" id="L73">    }</span>
+
+    public Long getSenderId() {
+<span class="nc" id="L76">        return senderId;</span>
+    }
+
+    public void setSenderId(Long senderId) {
+<span class="fc" id="L80">        this.senderId = senderId;</span>
+<span class="fc" id="L81">    }</span>
+
+    public String getSenderUsername() {
+<span class="fc" id="L84">        return senderUsername;</span>
+    }
+
+    public void setSenderUsername(String senderUsername) {
+<span class="fc" id="L88">        this.senderUsername = senderUsername;</span>
+<span class="fc" id="L89">    }</span>
+
+    public String getReceiverFirstName() {
+<span class="fc" id="L92">        return receiverFirstName;</span>
+    }
+
+    public void setReceiverFirstName(String receiverFirstName) {
+<span class="fc" id="L96">        this.receiverFirstName = receiverFirstName;</span>
+<span class="fc" id="L97">    }</span>
+
+    public String getReceiverLastName() {
+<span class="fc" id="L100">        return receiverLastName;</span>
+    }
+
+    public void setReceiverLastName(String receiverLastName) {
+<span class="fc" id="L104">        this.receiverLastName = receiverLastName;</span>
+<span class="fc" id="L105">    }</span>
+
+    public Long getReceiverId() {
+<span class="nc" id="L108">        return receiverId;</span>
+    }
+
+    public void setReceiverId(Long receiverId) {
+<span class="fc" id="L112">        this.receiverId = receiverId;</span>
+<span class="fc" id="L113">    }</span>
+
+    public String getReceiverUsername() {
+<span class="fc" id="L116">        return receiverUsername;</span>
+    }
+
+    public void setReceiverUsername(String receiverUsername) {
+<span class="fc" id="L120">        this.receiverUsername = receiverUsername;</span>
+<span class="fc" id="L121">    }</span>
+
+    public String getDescription() {
+<span class="nc" id="L124">        return description;</span>
+    }
+
+    public void setDescription(String description) {
+<span class="fc" id="L128">        this.description = description;</span>
+<span class="fc" id="L129">    }</span>
+
+    public LocalDate getTransferDate() {
+<span class="fc" id="L132">        return transferDate;</span>
+    }
+
+    public void setTransferDate(LocalDate transferDate) {
+<span class="fc" id="L136">        this.transferDate = transferDate;</span>
+<span class="fc" id="L137">    }</span>
+
+    public BigDecimal getTransferAmount() {
+<span class="fc" id="L140">        return transferAmount;</span>
+    }
+
+    public void setTransferAmount(BigDecimal transferAmount) {
+<span class="fc" id="L144">        this.transferAmount = transferAmount;</span>
+<span class="fc" id="L145">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

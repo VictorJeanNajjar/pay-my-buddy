@@ -59,6 +59,8 @@ public class MoneyTransfersService {
         transfer.setDescription(description);
         transfer.setTransferAmount(transferAmount);
         transfer.setTransferDate(dayOfTransfer);
+        transfer.setReceiverUsername(receiverUsername);
+        transfer.setSenderUsername(sender.getUsername());
 
         moneyTransfersRepository.save(transfer);
         personRepository.save(sender);
@@ -93,7 +95,7 @@ public class MoneyTransfersService {
 
         return transfersMap.entrySet()
                 .stream()
-                .sorted(Map.Entry.comparingByValue())
+                .sorted(Map.Entry.<String, LocalDate>comparingByValue().reversed())
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }

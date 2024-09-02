@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MoneyTransfersService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">alerts</a> &gt; <a href="index.source.html" class="el_package">pay.my.buddy.app.moneytransfers</a> &gt; <span class="el_source">MoneyTransfersService.java</span></div><h1>MoneyTransfersService.java</h1><pre class="source lang-java linenums">package pay.my.buddy.app.moneytransfers;
+
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import pay.my.buddy.app.companywallet.CompanyWalletService;
+import pay.my.buddy.app.person.Person;
+import pay.my.buddy.app.person.PersonRepository;
+import pay.my.buddy.app.person.PersonService;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+@Service
+<span class="fc" id="L22">public class MoneyTransfersService {</span>
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
+    private MoneyTransfersRepository moneyTransfersRepository;
+    @Autowired
+    private CompanyWalletService companyWalletService;
+    @Autowired
+    private PersonService personService;
+
+    @Transactional
+    public String transferMoney(String receiverUsername, BigDecimal transferAmount, String description, Long companyWalletId) {
+<span class="fc" id="L36">        Long senderId = personService.getCurrentUserId();</span>
+<span class="pc" id="L37">        Person sender = personRepository.findById(senderId).orElseThrow(() -&gt; new RuntimeException(&quot;Sender not found&quot;));</span>
+<span class="fc" id="L38">        Person receiver = personRepository.findByUsername(receiverUsername).orElseThrow(() -&gt; new RuntimeException(&quot;Receiver not found&quot;));</span>
+<span class="fc" id="L39">        Long receiverId = receiver.getPersonId();</span>
+<span class="fc" id="L40">        int sufficientFundsTest = sender.getWallet().compareTo(transferAmount);</span>
+<span class="fc" id="L41">        LocalDate dayOfTransfer = LocalDate.now();</span>
+
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (sufficientFundsTest &lt; 0) {</span>
+<span class="nc" id="L44">            throw new RuntimeException(&quot;Insufficient funds&quot;);</span>
+        }
+<span class="fc" id="L46">        BigDecimal companyDecimalValue = new BigDecimal (&quot;0.005&quot;);</span>
+<span class="fc" id="L47">        BigDecimal clientDecimalValue = new BigDecimal(&quot;0.995&quot;);</span>
+<span class="fc" id="L48">        sender.setWallet(sender.getWallet().subtract(transferAmount));</span>
+<span class="fc" id="L49">        receiver.setWallet(receiver.getWallet().add(transferAmount.multiply(clientDecimalValue)));</span>
+<span class="fc" id="L50">        companyWalletService.addFundsToWallet(companyWalletId, transferAmount.multiply(companyDecimalValue));</span>
+
+<span class="fc" id="L52">        MoneyTransfers transfer = new MoneyTransfers();</span>
+<span class="fc" id="L53">        transfer.setSenderId(senderId);</span>
+<span class="fc" id="L54">        transfer.setSenderFirstName(sender.getFirstName());</span>
+<span class="fc" id="L55">        transfer.setSenderLastName(sender.getLastName());</span>
+<span class="fc" id="L56">        transfer.setReceiverId(receiverId);</span>
+<span class="fc" id="L57">        transfer.setReceiverFirstName(receiver.getFirstName());</span>
+<span class="fc" id="L58">        transfer.setReceiverLastName(receiver.getLastName());</span>
+<span class="fc" id="L59">        transfer.setDescription(description);</span>
+<span class="fc" id="L60">        transfer.setTransferAmount(transferAmount);</span>
+<span class="fc" id="L61">        transfer.setTransferDate(dayOfTransfer);</span>
+<span class="fc" id="L62">        transfer.setReceiverUsername(receiverUsername);</span>
+<span class="fc" id="L63">        transfer.setSenderUsername(sender.getUsername());</span>
+
+<span class="fc" id="L65">        moneyTransfersRepository.save(transfer);</span>
+<span class="fc" id="L66">        personRepository.save(sender);</span>
+<span class="fc" id="L67">        personRepository.save(receiver);</span>
+<span class="fc" id="L68">        return &quot;money transferred successfully&quot;;</span>
+    }
+    public List&lt;String&gt; userTransfers() {
+<span class="fc" id="L71">        Long personId = personService.getCurrentUserId();</span>
+<span class="fc" id="L72">        List&lt;MoneyTransfers&gt; receivedTransfers = moneyTransfersRepository.findByReceiverId(personId);</span>
+<span class="fc" id="L73">        List&lt;MoneyTransfers&gt; senderTransfers = moneyTransfersRepository.findBySenderId(personId);</span>
+<span class="fc" id="L74">        Map&lt;String, LocalDate&gt; transfersMap = new HashMap&lt;&gt;();</span>
+
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        for (MoneyTransfers moneyTransfersReceived : receivedTransfers) {</span>
+<span class="fc" id="L77">            BigDecimal receivedAmount = moneyTransfersReceived.getTransferAmount();</span>
+<span class="fc" id="L78">            String senderFirstName = moneyTransfersReceived.getSenderFirstName();</span>
+<span class="fc" id="L79">            String senderLastName = moneyTransfersReceived.getSenderLastName();</span>
+<span class="fc" id="L80">            String senderUsername = moneyTransfersReceived.getSenderUsername();</span>
+<span class="fc" id="L81">            LocalDate receivedTransferDate = moneyTransfersReceived.getTransferDate();</span>
+<span class="fc" id="L82">            String transferString = receivedTransferDate + &quot; &quot; + senderFirstName + &quot; &quot; + senderLastName + &quot; username: &quot; + senderUsername + &quot; amount: +&quot; + receivedAmount;</span>
+<span class="fc" id="L83">            transfersMap.put(transferString, receivedTransferDate);</span>
+<span class="fc" id="L84">        }</span>
+
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        for (MoneyTransfers moneyTransfersSent : senderTransfers) {</span>
+<span class="fc" id="L87">            BigDecimal sentAmount = moneyTransfersSent.getTransferAmount();</span>
+<span class="fc" id="L88">            String receiverFirstName = moneyTransfersSent.getReceiverFirstName();</span>
+<span class="fc" id="L89">            String receiverLastName = moneyTransfersSent.getReceiverLastName();</span>
+<span class="fc" id="L90">            String receiverUsername = moneyTransfersSent.getReceiverUsername();</span>
+<span class="fc" id="L91">            LocalDate sentTransferDate = moneyTransfersSent.getTransferDate();</span>
+<span class="fc" id="L92">            String transferString = sentTransferDate + &quot; &quot; + receiverFirstName + &quot; &quot; + receiverLastName + &quot; username: &quot; + receiverUsername + &quot; amount: -&quot; + sentAmount;</span>
+<span class="fc" id="L93">            transfersMap.put(transferString, sentTransferDate);</span>
+<span class="fc" id="L94">        }</span>
+
+<span class="fc" id="L96">        return transfersMap.entrySet()</span>
+<span class="fc" id="L97">                .stream()</span>
+<span class="fc" id="L98">                .sorted(Map.Entry.&lt;String, LocalDate&gt;comparingByValue().reversed())</span>
+<span class="fc" id="L99">                .map(Map.Entry::getKey)</span>
+<span class="fc" id="L100">                .collect(Collectors.toList());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

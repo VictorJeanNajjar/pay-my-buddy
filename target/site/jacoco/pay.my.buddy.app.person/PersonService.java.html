@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PersonService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">alerts</a> &gt; <a href="index.source.html" class="el_package">pay.my.buddy.app.person</a> &gt; <span class="el_source">PersonService.java</span></div><h1>PersonService.java</h1><pre class="source lang-java linenums">package pay.my.buddy.app.person;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L14">public class PersonService {</span>
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    public PersonRepository personRepository;
+
+    public Long getCurrentUserId() {
+<span class="fc" id="L22">        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();</span>
+        String username;
+
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (principal instanceof UserDetails) {</span>
+<span class="fc" id="L26">            username = ((UserDetails) principal).getUsername();</span>
+        } else {
+<span class="fc" id="L28">            username = principal.toString();</span>
+        }
+
+<span class="fc" id="L31">        String sql = &quot;SELECT user_Id FROM Person WHERE username = ?&quot;;</span>
+<span class="fc" id="L32">        return jdbcTemplate.queryForObject(sql, Long.class, username);</span>
+    }
+    public String addNewPerson(Person newClient){
+<span class="fc" id="L35">        Optional&lt;Person&gt; emailChecker = personRepository.findByEmailAddress(newClient.getEmailAddress());</span>
+<span class="fc" id="L36">        Optional&lt;Person&gt; usernameChecker = personRepository.findByUsername(newClient.getUsername());</span>
+<span class="fc" id="L37">        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();</span>
+<span class="fc" id="L38">        String clientPassword = newClient.getPassword();</span>
+<span class="fc bfc" id="L39" title="All 4 branches covered.">        if (emailChecker.isEmpty() &amp;&amp; usernameChecker.isEmpty()){</span>
+<span class="fc" id="L40">            newClient.setPassword(encoder.encode(clientPassword));</span>
+<span class="fc" id="L41">            personRepository.save(newClient);</span>
+<span class="fc" id="L42">            return &quot;account created successfully&quot;;</span>
+        }
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        else if (emailChecker.isPresent()){</span>
+<span class="fc" id="L45">            return &quot;email already exists&quot;;</span>
+        } else {
+<span class="fc" id="L47">            return &quot;username already exists&quot;;</span>
+        }
+    }
+    public String accountDeletion() {
+<span class="fc" id="L51">        Long deletedAccountId = getCurrentUserId();</span>
+<span class="fc" id="L52">        Person deletedAccount =  personRepository.findById(deletedAccountId).orElseThrow(() -&gt; new RuntimeException(&quot;person not found&quot;));</span>
+<span class="fc" id="L53">        personRepository.delete(deletedAccount);</span>
+<span class="fc" id="L54">        return &quot;account deleted&quot;;</span>
+    }
+    public String changeAccountInformation(Optional&lt;String&gt; email,
+                                           Optional&lt;String&gt; password,
+                                           Optional&lt;String&gt; firstName,
+                                           Optional&lt;String&gt; lastName,
+                                           Optional&lt;BigDecimal&gt; wallet){
+<span class="fc" id="L61">        Long currentUserId = getCurrentUserId();</span>
+<span class="pc" id="L62">        Person currentUser = personRepository.findById(currentUserId).orElseThrow(() -&gt; new RuntimeException(&quot;person not found&quot;));</span>
+<span class="fc" id="L63">        String responseIfUpdated = &quot;you have successfully updated your:&quot;;</span>
+<span class="fc" id="L64">        String response = &quot;&quot;;</span>
+<span class="fc" id="L65">        String inUseMessage = &quot;&quot;;</span>
+<span class="fc" id="L66">        Boolean counter = Boolean.FALSE;</span>
+<span class="fc bfc" id="L67" title="All 4 branches covered.">        if (email.isPresent() &amp;&amp; personRepository.findByEmailAddress(email.get()).isEmpty()){</span>
+<span class="fc" id="L68">            currentUser.setEmailAddress(email.get());</span>
+<span class="fc" id="L69">            response = response + &quot; email&quot;;</span>
+<span class="fc" id="L70">            counter = Boolean.TRUE;</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        }if (password.isPresent()){</span>
+<span class="fc" id="L72">            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();</span>
+<span class="fc" id="L73">            String clientPassword = password.get();</span>
+<span class="fc" id="L74">            currentUser.setPassword(encoder.encode(clientPassword));</span>
+<span class="fc" id="L75">            response = response + &quot; password&quot;;</span>
+<span class="fc" id="L76">            counter = Boolean.TRUE;</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        }if (firstName.isPresent()){</span>
+<span class="nc" id="L78">            currentUser.setFirstName(firstName.get());</span>
+<span class="nc" id="L79">            response = response + &quot; firstname&quot;;</span>
+<span class="nc" id="L80">            counter = Boolean.TRUE;</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        }if(lastName.isPresent()){</span>
+<span class="nc" id="L82">            currentUser.setLastName(lastName.get());</span>
+<span class="nc" id="L83">            response = response + &quot; last name&quot;;</span>
+<span class="nc" id="L84">            counter = Boolean.TRUE;</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        }if (wallet.isPresent()){</span>
+<span class="nc" id="L86">            currentUser.setWallet(wallet.get());</span>
+<span class="nc" id="L87">            response = response + &quot; wallet&quot;;</span>
+<span class="nc" id="L88">            counter = Boolean.TRUE;</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        }if(email.isPresent()){</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">            if (personRepository.findByEmailAddress(email.get()).isPresent()){</span>
+<span class="fc" id="L91">                inUseMessage = &quot;email already in use&quot;;</span>
+            }
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        }else if (!counter) {</span>
+<span class="fc" id="L94">            return &quot;please fill at least one of the following you want to change: password, email, first name, last name, wallet.&quot;;</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        }if (counter){</span>
+<span class="fc" id="L96">            response = &quot;you have successfully updated your:&quot; + response;</span>
+        }
+<span class="fc" id="L98">        personRepository.save(currentUser);</span>
+<span class="fc" id="L99">        return (inUseMessage + response + &quot;.&quot;);</span>
+    }
+    public String checkWallet(){
+<span class="fc" id="L102">        Long currentUserId = getCurrentUserId();</span>
+<span class="fc" id="L103">        Person currentUser = personRepository.findById(currentUserId).orElseThrow(() -&gt; new RuntimeException(&quot;person not found&quot;));</span>
+<span class="fc" id="L104">        return (&quot;your wallet is &quot; + currentUser.getWallet());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

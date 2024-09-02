@@ -6,10 +6,7 @@ import pay.my.buddy.app.person.Person;
 import pay.my.buddy.app.person.PersonRepository;
 import pay.my.buddy.app.person.PersonService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class FriendsService {
@@ -27,7 +24,9 @@ public class FriendsService {
         Friends friends = new Friends();
         Optional<Friends> existingFriendship = friendsRepository.findBySenderIdAndAndReceiverId(senderId, receiverId);
         Optional<Friends> existingFriendship2 = friendsRepository.findBySenderIdAndAndReceiverId(receiverId, senderId);
-        if (existingFriendship.isEmpty() && existingFriendship2.isEmpty() && optionalSender.isPresent()) {
+        if (senderId == receiverId) {
+            return "cant add yourself";
+        }else if (existingFriendship.isEmpty() && existingFriendship2.isEmpty() && optionalSender.isPresent()) {
             Person sender = optionalSender.get();
             friends.setSenderFirstName(sender.getFirstName());
             friends.setSenderLastName(sender.getLastName());
@@ -39,15 +38,19 @@ public class FriendsService {
             friends.setSenderUsername(sender.getUsername());
             friendsRepository.save(friends);
             return ("friend added");
-        }
-        else {
+        }else {
             return ("friends already");
         }
     }
     public String deleteFriend(Long id){
         Friends deleteFriendship = friendsRepository.findById(id).orElseThrow(() -> new RuntimeException("friendship not found"));
-        friendsRepository.delete(deleteFriendship);
-        return "friendship deleted";
+        Long curentUserId = personService.getCurrentUserId();
+        if (Objects.equals(deleteFriendship.getSenderId(), curentUserId) || Objects.equals(deleteFriendship.getReceiverId(), curentUserId)){
+            friendsRepository.delete(deleteFriendship);
+            return "friendship deleted";
+        }else {
+            return "invalid user for operation";
+        }
     }
     public List <String> friendsList(){
         Person currentUser = personRepository.findById(personService.getCurrentUserId()).orElseThrow(() -> new RuntimeException("Receiver not found"));

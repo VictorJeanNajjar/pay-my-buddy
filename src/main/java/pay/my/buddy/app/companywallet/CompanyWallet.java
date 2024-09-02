@@ -7,12 +7,11 @@ import java.math.BigDecimal;
 @Entity
 public class CompanyWallet {
     @Id
-    @GeneratedValue
     private Long id;
     private BigDecimal wallet;
 
     public CompanyWallet() {
-
+        this.wallet = BigDecimal.ZERO;
     }
 
     public void addToWallet(BigDecimal amount) {

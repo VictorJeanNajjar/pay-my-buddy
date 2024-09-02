@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: pay.my.buddy.app.MoneyTransfersTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.126 s -- in pay.my.buddy.app.MoneyTransfersTest

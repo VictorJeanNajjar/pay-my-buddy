@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Friends.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">alerts</a> &gt; <a href="index.source.html" class="el_package">pay.my.buddy.app.friends</a> &gt; <span class="el_source">Friends.java</span></div><h1>Friends.java</h1><pre class="source lang-java linenums">package pay.my.buddy.app.friends;
+
+import jakarta.persistence.*;
+
+@Entity
+public class Friends {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;friendship_id&quot;)
+    public long friendshipId;
+    public String senderFirstName;
+    public String senderLastName;
+    public Long senderId;
+    public String senderUsername;
+    public String receiverFirstName;
+    public String receiverLastName;
+    public Long receiverId;
+    public String receiverUsername;
+<span class="fc" id="L19">    public Friends() {</span>
+<span class="fc" id="L20">    }</span>
+    @Override
+    public String toString() {
+<span class="nc" id="L23">        return &quot;Friends{&quot; +</span>
+                &quot;friendshipId=&quot; + friendshipId +
+                &quot;, senderFirstName='&quot; + senderFirstName + '\'' +
+                &quot;, senderLastName='&quot; + senderLastName + '\'' +
+                &quot;, senderId=&quot; + senderId +
+                &quot;, senderUsername='&quot; + senderUsername + '\'' +
+                &quot;, receiverFirstName='&quot; + receiverFirstName + '\'' +
+                &quot;, receiverLastName='&quot; + receiverLastName + '\'' +
+                &quot;, receiverId=&quot; + receiverId +
+                &quot;, receiverUsername='&quot; + receiverUsername + '\'' +
+                '}';
+    }
+
+    public long getFriendshipId() {
+<span class="nc" id="L37">        return friendshipId;</span>
+    }
+
+    public void setFriendshipId(long friendshipId) {
+<span class="fc" id="L41">        this.friendshipId = friendshipId;</span>
+<span class="fc" id="L42">    }</span>
+
+    public String getSenderFirstName() {
+<span class="fc" id="L45">        return senderFirstName;</span>
+    }
+
+    public void setSenderFirstName(String senderFirstName) {
+<span class="fc" id="L49">        this.senderFirstName = senderFirstName;</span>
+<span class="fc" id="L50">    }</span>
+
+    public String getSenderLastName() {
+<span class="fc" id="L53">        return senderLastName;</span>
+    }
+
+    public void setSenderLastName(String senderLastName) {
+<span class="fc" id="L57">        this.senderLastName = senderLastName;</span>
+<span class="fc" id="L58">    }</span>
+
+    public Long getSenderId() {
+<span class="fc" id="L61">        return senderId;</span>
+    }
+
+    public void setSenderId(Long senderId) {
+<span class="fc" id="L65">        this.senderId = senderId;</span>
+<span class="fc" id="L66">    }</span>
+
+    public String getSenderUsername() {
+<span class="fc" id="L69">        return senderUsername;</span>
+    }
+
+    public void setSenderUsername(String senderUsername) {
+<span class="fc" id="L73">        this.senderUsername = senderUsername;</span>
+<span class="fc" id="L74">    }</span>
+
+    public String getReceiverFirstName() {
+<span class="fc" id="L77">        return receiverFirstName;</span>
+    }
+
+    public void setReceiverFirstName(String receiverFirstName) {
+<span class="fc" id="L81">        this.receiverFirstName = receiverFirstName;</span>
+<span class="fc" id="L82">    }</span>
+
+    public String getReceiverLastName() {
+<span class="fc" id="L85">        return receiverLastName;</span>
+    }
+
+    public void setReceiverLastName(String receiverLastName) {
+<span class="fc" id="L89">        this.receiverLastName = receiverLastName;</span>
+<span class="fc" id="L90">    }</span>
+
+    public Long getReceiverId() {
+<span class="fc" id="L93">        return receiverId;</span>
+    }
+
+    public void setReceiverId(Long receiverId) {
+<span class="fc" id="L97">        this.receiverId = receiverId;</span>
+<span class="fc" id="L98">    }</span>
+
+    public String getReceiverUsername() {
+<span class="fc" id="L101">        return receiverUsername;</span>
+    }
+
+    public void setReceiverUsername(String receiverUsername) {
+<span class="fc" id="L105">        this.receiverUsername = receiverUsername;</span>
+<span class="fc" id="L106">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

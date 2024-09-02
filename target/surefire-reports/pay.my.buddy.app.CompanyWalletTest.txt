@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: pay.my.buddy.app.CompanyWalletTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.898 s -- in pay.my.buddy.app.CompanyWalletTest

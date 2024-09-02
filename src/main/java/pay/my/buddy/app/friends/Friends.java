@@ -1,12 +1,12 @@
 package pay.my.buddy.app.friends;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 @Entity
 public class Friends {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "friendship_id")
     public long friendshipId;
     public String senderFirstName;
     public String senderLastName;

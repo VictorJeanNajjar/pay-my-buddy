@@ -1,6 +1,7 @@
 package pay.my.buddy.app.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.User;
@@ -23,7 +24,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
         try {
             person = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Person.class), username);
-        } catch (Exception e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
 
@@ -36,4 +37,5 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 .authorities("USER")
                 .build();
     }
+
 }

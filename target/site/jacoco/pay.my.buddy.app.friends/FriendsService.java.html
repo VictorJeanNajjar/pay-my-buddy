@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FriendsService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">alerts</a> &gt; <a href="index.source.html" class="el_package">pay.my.buddy.app.friends</a> &gt; <span class="el_source">FriendsService.java</span></div><h1>FriendsService.java</h1><pre class="source lang-java linenums">package pay.my.buddy.app.friends;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import pay.my.buddy.app.person.Person;
+import pay.my.buddy.app.person.PersonRepository;
+import pay.my.buddy.app.person.PersonService;
+
+import java.util.*;
+
+@Service
+<span class="fc" id="L12">public class FriendsService {</span>
+    @Autowired
+    public FriendsRepository friendsRepository;
+    @Autowired
+    public PersonRepository personRepository;
+    @Autowired
+    PersonService personService;
+    public String addFriend(String person2Username){
+<span class="fc" id="L20">        Long senderId = personService.getCurrentUserId();</span>
+<span class="pc" id="L21">        Person receiver = personRepository.findByUsername(person2Username).orElseThrow(() -&gt; new RuntimeException(&quot;Receiver not found&quot;));</span>
+<span class="fc" id="L22">        Long receiverId = receiver.getPersonId();</span>
+<span class="fc" id="L23">        Optional&lt;Person&gt; optionalSender = personRepository.findById(senderId);</span>
+<span class="fc" id="L24">        Friends friends = new Friends();</span>
+<span class="fc" id="L25">        Optional&lt;Friends&gt; existingFriendship = friendsRepository.findBySenderIdAndAndReceiverId(senderId, receiverId);</span>
+<span class="fc" id="L26">        Optional&lt;Friends&gt; existingFriendship2 = friendsRepository.findBySenderIdAndAndReceiverId(receiverId, senderId);</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if (senderId == receiverId) {</span>
+<span class="nc" id="L28">            return &quot;cant add yourself&quot;;</span>
+<span class="pc bpc" id="L29" title="2 of 6 branches missed.">        }else if (existingFriendship.isEmpty() &amp;&amp; existingFriendship2.isEmpty() &amp;&amp; optionalSender.isPresent()) {</span>
+<span class="fc" id="L30">            Person sender = optionalSender.get();</span>
+<span class="fc" id="L31">            friends.setSenderFirstName(sender.getFirstName());</span>
+<span class="fc" id="L32">            friends.setSenderLastName(sender.getLastName());</span>
+<span class="fc" id="L33">            friends.setReceiverFirstName(receiver.getFirstName());</span>
+<span class="fc" id="L34">            friends.setReceiverLastName(receiver.getLastName());</span>
+<span class="fc" id="L35">            friends.setReceiverId(receiverId);</span>
+<span class="fc" id="L36">            friends.setReceiverUsername(receiver.getUsername());</span>
+<span class="fc" id="L37">            friends.setSenderId(senderId);</span>
+<span class="fc" id="L38">            friends.setSenderUsername(sender.getUsername());</span>
+<span class="fc" id="L39">            friendsRepository.save(friends);</span>
+<span class="fc" id="L40">            return (&quot;friend added&quot;);</span>
+        }else {
+<span class="fc" id="L42">            return (&quot;friends already&quot;);</span>
+        }
+    }
+    public String deleteFriend(Long id){
+<span class="fc" id="L46">        Friends deleteFriendship = friendsRepository.findById(id).orElseThrow(() -&gt; new RuntimeException(&quot;friendship not found&quot;));</span>
+<span class="fc" id="L47">        Long curentUserId = personService.getCurrentUserId();</span>
+<span class="fc bfc" id="L48" title="All 4 branches covered.">        if (Objects.equals(deleteFriendship.getSenderId(), curentUserId) || Objects.equals(deleteFriendship.getReceiverId(), curentUserId)){</span>
+<span class="fc" id="L49">            friendsRepository.delete(deleteFriendship);</span>
+<span class="fc" id="L50">            return &quot;friendship deleted&quot;;</span>
+        }else {
+<span class="fc" id="L52">            return &quot;invalid user for operation&quot;;</span>
+        }
+    }
+    public List &lt;String&gt; friendsList(){
+<span class="pc" id="L56">        Person currentUser = personRepository.findById(personService.getCurrentUserId()).orElseThrow(() -&gt; new RuntimeException(&quot;Receiver not found&quot;));</span>
+<span class="fc" id="L57">        Long currentUserId = currentUser.getPersonId();</span>
+<span class="fc" id="L58">        List &lt;String&gt; friendsListOfUser = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L59">        List &lt;Friends&gt; peopleUserAdded = friendsRepository.findBySenderId(currentUserId);</span>
+<span class="fc" id="L60">        List&lt;Friends&gt; peopleThatAddedUser = friendsRepository.findByReceiverId(currentUserId);</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        for (Friends receiverFriendsObject : peopleUserAdded){</span>
+<span class="fc" id="L62">            String receiverFriendFirstName = receiverFriendsObject.getReceiverFirstName();</span>
+<span class="fc" id="L63">            String receiverFriendLastName = receiverFriendsObject.getReceiverLastName();</span>
+<span class="fc" id="L64">            String receiverUsername = receiverFriendsObject.getReceiverUsername();</span>
+<span class="fc" id="L65">            String receiverFriendFirstAndLastNameAndUsername = receiverFriendFirstName + &quot; &quot; + receiverFriendLastName + &quot; username: &quot; + receiverUsername;</span>
+<span class="fc" id="L66">            friendsListOfUser.add(receiverFriendFirstAndLastNameAndUsername);</span>
+
+<span class="fc" id="L68">        }</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        for (Friends senderFriendObject : peopleThatAddedUser){</span>
+<span class="fc" id="L70">            String senderFriendFirstName = senderFriendObject.getSenderFirstName();</span>
+<span class="fc" id="L71">            String senderFriendLastName = senderFriendObject.getSenderLastName();</span>
+<span class="fc" id="L72">            String senderFriendUsername = senderFriendObject.getSenderUsername();</span>
+<span class="fc" id="L73">            String senderFriendFirstAndLastNameAndUsername = senderFriendFirstName + &quot; &quot; + senderFriendLastName + &quot; username: &quot; + senderFriendUsername;</span>
+<span class="fc" id="L74">            friendsListOfUser.add(senderFriendFirstAndLastNameAndUsername);</span>
+<span class="fc" id="L75">        }</span>
+<span class="fc" id="L76">        Collections.sort(friendsListOfUser);</span>
+<span class="fc" id="L77">        return friendsListOfUser;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

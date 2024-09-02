@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FriendsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">alerts</a> &gt; <a href="index.source.html" class="el_package">pay.my.buddy.app.friends</a> &gt; <span class="el_source">FriendsController.java</span></div><h1>FriendsController.java</h1><pre class="source lang-java linenums">package pay.my.buddy.app.friends;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import pay.my.buddy.app.person.Person;
+import pay.my.buddy.app.person.PersonRepository;
+import pay.my.buddy.app.person.PersonService;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/friends&quot;)
+public class FriendsController {
+    @Autowired
+    PersonService personService;
+    @Autowired
+    FriendsService friendsService;
+    @Autowired
+    FriendsRepository friendsRepository;
+    @Autowired
+    PersonRepository personRepository;
+<span class="fc" id="L22">    public FriendsController() {</span>
+<span class="fc" id="L23">    }</span>
+
+    @PostMapping(&quot;/add&quot;)
+    public String addFriendController(@RequestParam String friend2Username){
+<span class="nc" id="L27">        return friendsService.addFriend(friend2Username);</span>
+    }
+    @GetMapping(&quot;/viewAllFriends&quot;)
+<span class="nc" id="L30">    public List&lt;Friends&gt; viewAllFriends(){return friendsRepository.findAll();}</span>
+    @DeleteMapping(&quot;/deleteFriendship&quot;)
+    public String deleteFriendController(@RequestParam Long id){
+<span class="nc" id="L33">        return friendsService.deleteFriend(id);</span>
+    }
+    @GetMapping(&quot;/userFriendslist&quot;)
+    public List&lt;String&gt; friendsListcontroller(){
+<span class="nc" id="L37">        return friendsService.friendsList();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
